@@ -15,7 +15,7 @@ const Home: NextPage<Props> = (props) => {
 
   return (
     <div className={styles.container}>
-      <p>Enter a Name {name}:</p>
+      <p>Enter a Name: {name}</p>
       <input
         type="text"
         value={newName}
