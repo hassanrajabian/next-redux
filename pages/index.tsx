@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import React, { useState } from "react";
 import styles from "../styles/Home.module.css";
 import { setInfo } from "../redux/actions/main";
-import { connect } from "react-redux";
+import { connect, RootStateOrAny, useDispatch, useSelector } from "react-redux";
 
 interface Props {
   name: string;
@@ -10,8 +10,10 @@ interface Props {
 }
 
 const Home: NextPage<Props> = (props) => {
-  const { name, setInfo } = props;
   const [newName, setNewName] = useState<string>("");
+
+  const name = useSelector((state: RootStateOrAny) => state.main.name);
+  const dispatch = useDispatch();
 
   return (
     <div className={styles.container}>
@@ -21,17 +23,9 @@ const Home: NextPage<Props> = (props) => {
         value={newName}
         onChange={(e) => setNewName(e.target.value)}
       ></input>
-      <button onClick={() => setInfo(newName)}>Submit</button>
+      <button onClick={() => dispatch(setInfo(newName))}>Submit</button>
     </div>
   );
 };
 
-const mapStateToProps = (state: any) => {
-  return { name: state.main.name };
-};
-
-const mapDispatchToProps = {
-  setInfo,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;
