@@ -5,7 +5,19 @@ import rootReducer from "./reducers/rootReducer";
 
 const middleware = [thunk];
 
-const makeStore = () =>
-  createStore(rootReducer, compose(applyMiddleware(...middleware)));
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+  }
+}
+
+const composeEnhancers =
+  typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__(
+        applyMiddleware(...middleware)
+      )
+    : compose;
+
+const makeStore = () => createStore(rootReducer, composeEnhancers);
 
 export const wrapper = createWrapper(makeStore);
